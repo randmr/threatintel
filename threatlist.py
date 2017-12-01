@@ -62,10 +62,10 @@ def extractField(name, category, input, sev):
                         elif line.strip().startswith("/"):
                                 continue
                         elif "/" in line.strip():
-                                tf_output.write(line.strip() + "," + name + "(" + sev + ")\n")
+                                tf_output.write(line.strip() + "," + name + "," + sev + "\n")
                                 lineCount += 1
                         else:
-                                tf_output.write(line.strip() + "/32," + name + "(" + sev + ")\n")
+                                tf_output.write(line.strip() + "/32," + name + "," + sev + "\n")
                                 lineCount += 1
                 logging("Extract Field Complete: name=" + name + " category=" + category + " sev=" + sev + " entries=" + str(lineCount))
         elif category == 'range':
@@ -80,7 +80,7 @@ def extractField(name, category, input, sev):
                                 iprange_end = reObj.group(3)
                                 ipranges = list(iprange_to_cidrs(iprange_start, iprange_end))
                                 for iprange in ipranges:
-                                        tf_output.write(str(iprange) + "," + reObj.group(1).replace(",", "") + "(" + sev + ")\n")
+                                        tf_output.write(str(iprange) + "," + reObj.group(1).replace(",", "") + "," + sev + "\n")
                                 lineCount += 1
                 logging("Extract Field Complete: name=" + name + " category=" + category + " sev=" + sev + " entries=" + str(lineCount))
         elif category == 'col':
@@ -97,7 +97,7 @@ def extractField(name, category, input, sev):
                                 iprange_ed = reObj.group(2)
                                 ipranges = list(iprange_to_cidrs(iprange_st, iprange_ed))
                                 for iprange in ipranges:
-                                        tf_output.write(str(iprange) + "," + name + "(" + sev + ")\n")
+                                        tf_output.write(str(iprange) + "," + name + "," + sev + "\n")
                                 lineCount += 1
                 logging("Extract Field Complete: name=" + name + " category=" + category + " sev=" + sev + " entries=" + str(lineCount))
         else:
@@ -110,6 +110,7 @@ def readThreatlist():
                 threatlist =  open(os.path.join(destDir, 'threatlist.in.csv'), 'rU')
                 next(threatlist, None) #skip the headers
                 for line in threatlist :
+                    if not line.startswith("#"):
                         cells = line.split(",")
                         try:
                                 req = requests.get(cells[1], allow_redirects=True)
@@ -146,7 +147,7 @@ def readcustomlist():
                 errorLogging("Read custom list Failure: " + errorMsg)
 
 tf_output = open(tfoutPath, 'w')
-tf_output.write("iprange,threat\n")
+tf_output.write("ip_range,threat_name,threat_severity\n")
 
 logging("Start")
 
