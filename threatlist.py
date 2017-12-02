@@ -7,6 +7,7 @@ import zlib
 import time
 import sys
 import shutil
+import uuid
 from datetime import datetime
 
 from time import gmtime, strftime
@@ -23,12 +24,16 @@ tfoutPath = os.path.join(procDir, "threatlist.temp")
 
 global success
 success = True
+global sessionUuid
+sessionUuid = str(uuid.uuid4())
 
 def logging(content):
-        print(str(datetime.now()) + ": " + content)
+        global sessionUuid
+        print(str(datetime.now()) + ": " + content + " uuid=" + sessionUuid)
 
 def errorLogging(content):
-        sys.stderr.write(str(datetime.now()) + ": " + content + "\n")
+        global sessionUuid
+        sys.stderr.write(str(datetime.now()) + ": " + content + " uuid=" + sessionUuid + "\n")
         sys.stderr.flush()
 
 def commit():
