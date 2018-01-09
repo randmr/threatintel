@@ -51,7 +51,7 @@ def formatter(name, category, sev, input):
                         ef_input = zlib.decompress(StringIO(input).read(), -zlib.MAX_WBITS)
                 except Exception, e:
                         ef_input = input
-        logging(name + ": Extracting Fields")
+        logging("Extracting Fields: name=" + name)
         extractField(name, category, ef_input, sev)
 
 def extractField(name, category, input, sev):

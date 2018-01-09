@@ -1,5 +1,6 @@
 import os
 import subprocess
+import sys
 
 _NEW_PYTHON_PATH = '/usr/bin/python'
 _SPLUNK_PYTHON_PATH = os.environ['PYTHONPATH']
@@ -10,5 +11,5 @@ my_process = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'threatlis
 p = subprocess.Popen([os.environ['PYTHONPATH'], my_process, _SPLUNK_PYTHON_PATH],
 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 output,err = p.communicate()
-print "output: " + output
-print "err: " + err
+print output
+sys.stderr.write(err)
